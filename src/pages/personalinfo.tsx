@@ -1,13 +1,14 @@
 // src/components/PersonalInfoPage.tsx
 import React from "react";
 import Image from "next/image";
-import { ChevronUp, User, Cake, Phone, Mail } from "lucide-react";
+import { ChevronUp, User, Cake, Phone, Mail, ArrowLeft } from "lucide-react";
 
 import bgImage from "../../public/gradient-bg.jpg";
 import badgeImg from "../../public/vip-badge.png";
 import { IoInformation } from "react-icons/io5";
 import { useRouter } from "next/router";
 import moment from "moment";
+import Link from "next/link";
 
 export default function PersonalInfoPage() {
   const [profile, setProfile] = React.useState<{
@@ -73,8 +74,12 @@ export default function PersonalInfoPage() {
 
   return (
     <div className="md:hidden bg-[#1E1F29] min-h-screen text-white">
-      <header className="flex items-center justify-center bg-[#14805e] h-12 relative">
+      <header className="flex items-center justify-between bg-[#14805e] h-12 relative px-5">
+        <Link href={"/profile"}>
+          <ArrowLeft size={24} className="text-white" />
+        </Link>
         <h1 className="text-lg font-medium text-white">Personal Information</h1>
+        <div />
       </header>
 
       {/* PROFILE HEADING */}
@@ -143,7 +148,11 @@ export default function PersonalInfoPage() {
               <InfoRow
                 key={index}
                 icon={Phone}
-                label={phone.primary ? "Phone Number (Primary)" : `Phone Number ${index + 1}`}
+                label={
+                  phone.primary
+                    ? "Phone Number (Primary)"
+                    : `Phone Number ${index + 1}`
+                }
                 value={phone.number}
                 button={{
                   text: phone.verified ? "" : "Not Verified",
@@ -200,25 +209,31 @@ function InfoRow({
       </div>
       {button.text ? (
         <button
-          onClick={button.onClick || (() => {
-            if (label === "Full Name") {
-              router.push("/add-fullname");
-            } else if (label === "Birthday") {
-              router.push("/add-birthday");
-            } else if (label === "Phone Number") {
-              if (button.text === "Add") {
-                router.push("/add-phone");
-              } else if (button.text === "Not Verified") {
-                router.push("/verification?type=phone");
+          onClick={
+            button.onClick ||
+            (() => {
+              if (label === "Full Name") {
+                router.push("/add-fullname");
+              } else if (label === "Birthday") {
+                router.push("/add-birthday");
+              } else if (label === "Phone Number") {
+                if (button.text === "Add") {
+                  router.push("/add-phone");
+                } else if (button.text === "Not Verified") {
+                  router.push("/verification?type=phone");
+                }
+              } else if (label === "Email") {
+                if (button.text === "Add") {
+                  router.push("/add-email");
+                } else if (button.text === "Not Verified") {
+                  router.push(
+                    "/verification?type=email&email=" +
+                      encodeURIComponent(value || "")
+                  );
+                }
               }
-            } else if (label === "Email") {
-              if (button.text === "Add") {
-                router.push("/add-email");
-              } else if (button.text === "Not Verified") {
-                router.push("/verification?type=email&email=" + encodeURIComponent(value || ""));
-              }
-            }
-          })}
+            })
+          }
           className={`
     ${button.color} 
     text-white text-sm font-medium 
