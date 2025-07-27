@@ -103,14 +103,26 @@ export default function SignupPage() {
             });
             const data = await res.json();
             if (res.ok) {
-              setSignupSuccess("Signup successful! Please log in.");
-              setUsername("");
-              setPassword("");
-              setConfirmPwd("");
-              setPhoneLocal("");
-              setReferCode("");
-              setVerificationInput("");
-              router.push("/");
+              // Auto-login after signup
+              const loginRes = await fetch("/api/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username, password }),
+              });
+              const loginData = await loginRes.json();
+              if (loginRes.ok && loginData && loginData.user) {
+                localStorage.setItem("user", JSON.stringify(loginData.user));
+                router.push("/personalinfo");
+              } else {
+                setSignupSuccess("Signup successful! Please log in.");
+                setUsername("");
+                setPassword("");
+                setConfirmPwd("");
+                setPhoneLocal("");
+                setReferCode("");
+                setVerificationInput("");
+                router.push("/");
+              }
             } else {
               setSignupError(data.message || "Signup failed");
             }
