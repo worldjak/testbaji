@@ -8,11 +8,7 @@ interface UploadFieldProps {
   onChange: (file: File) => void;
 }
 
-export default function UploadField({
-  label,
-  file,
-  onChange,
-}: UploadFieldProps) {
+export default function UploadField({ label, onChange }: UploadFieldProps) {
   return (
     <div className="space-y-1">
       <label className="text-sm text-gray-300">{label}</label>

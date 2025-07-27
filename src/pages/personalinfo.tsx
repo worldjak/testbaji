@@ -1,7 +1,7 @@
 // src/components/PersonalInfoPage.tsx
 import React from "react";
 import Image from "next/image";
-import { X, ChevronUp, User, Cake, Phone, Mail } from "lucide-react";
+import { ChevronUp, User, Cake, Phone, Mail } from "lucide-react";
 
 import bgImage from "../../public/gradient-bg.jpg";
 import badgeImg from "../../public/vip-badge.png";

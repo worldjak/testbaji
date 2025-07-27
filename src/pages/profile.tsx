@@ -1,4 +1,4 @@
-// src/components/ProfilePage.tsx
+/* eslint-disable @typescript-eslint/no-unused-vars */ 
 import React from "react";
 import Image from "next/image";
 import bgImage from "../../public/member-header-bg.png";
@@ -7,21 +7,14 @@ import { uploadToCloudinary } from "../utils/cloudinaryUpload";
 import {
   FiRefreshCcw,
   FiEye,
-  FiCreditCard,
-  FiArrowUp,
   FiList,
   FiRepeat,
   FiBarChart2,
-  FiUser,
-  FiLock,
   FiMail,
-  FiUsers,
-  FiFileText,
   FiLogOut,
 } from "react-icons/fi";
 import { AiOutlineWhatsApp, AiOutlineMail } from "react-icons/ai";
-import { FaFacebookF, FaUserTie } from "react-icons/fa";
-import { Upload } from "antd";
+import { FaUserTie } from "react-icons/fa";
 import { CameraIcon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/router";

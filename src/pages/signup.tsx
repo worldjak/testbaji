@@ -1,4 +1,4 @@
-// src/components/SignupPage.jsx
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useState, useCallback } from "react";
@@ -42,7 +42,7 @@ export default function SignupPage() {
 
   // handle only digits, max 10, no leading zero
   const handlePhoneChange = (e: any) => {
-    let digits = e.target.value.replace(/\D/g, "").slice(0, 10);
+    const digits = e.target.value.replace(/\D/g, "").slice(0, 10);
     if (digits && digits[0] === "0") {
       setPhoneError("Local number cannot start with 0");
     } else {

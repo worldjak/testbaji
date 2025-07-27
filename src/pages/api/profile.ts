@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { NextApiRequest, NextApiResponse } from "next";
 import clientPromise from "../../lib/mongodb";
 
@@ -45,11 +46,9 @@ export default async function handler(
     // Update avatar, fullname, or add phone
     const { username, avatar, fullname, addPhone } = req.body;
     if (!username || (!avatar && !fullname && !addPhone)) {
-      return res
-        .status(400)
-        .json({
-          message: "Username and avatar or fullname or addPhone required",
-        });
+      return res.status(400).json({
+        message: "Username and avatar or fullname or addPhone required",
+      });
     }
     try {
       const user = await users.findOne({ username });
@@ -74,11 +73,9 @@ export default async function handler(
         // Only allow if primary is verified and less than 3 phones
         const primary = phones.find((p: any) => p.primary);
         if (!primary || !primary.verified) {
-          return res
-            .status(400)
-            .json({
-              message: "Primary phone must be verified before adding more.",
-            });
+          return res.status(400).json({
+            message: "Primary phone must be verified before adding more.",
+          });
         }
         if (phones.length >= 3) {
           return res

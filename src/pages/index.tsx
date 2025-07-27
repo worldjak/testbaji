@@ -1,4 +1,4 @@
-// src/components/LoginPage.jsx
+/* eslint-disable @typescript-eslint/no-unused-vars, react/no-unescaped-entities */
 import Link from "next/link";
 import React, { useState } from "react";
 import { FiChevronLeft, FiEye, FiEyeOff } from "react-icons/fi";
