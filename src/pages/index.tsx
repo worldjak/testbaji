@@ -66,7 +66,7 @@ export default function LoginPage() {
         </label>
         <input
           type="text"
-          placeholder="Enter your username"
+          placeholder="Enter your username / phone number"
           className="w-full bg-[#1E1E1E] text-white placeholder-gray-400 rounded-md py-2 px-4 mb-4 focus:outline-none"
           value={username}
           onChange={(e) => setUsername(e.target.value)}

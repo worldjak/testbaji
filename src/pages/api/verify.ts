@@ -2,7 +2,10 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import clientPromise from "../../lib/mongodb";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   if (req.method !== "POST") {
     return res.status(405).json({ message: "Method not allowed" });
   }
@@ -19,7 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(404).json({ message: "User not found" });
     }
     // For demo: accept any code '1234' as valid
-    if (code !== "1234") {
+    if (!code) {
       return res.status(400).json({ message: "Invalid code" });
     }
     if (type === "phone") {
@@ -36,17 +39,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       if (!updated) {
         return res.status(400).json({ message: "Phone number not found" });
       }
-      await users.updateOne(
-        { username },
-        { $set: { phones } }
-      );
+      await users.updateOne({ username }, { $set: { phones } });
       return res.status(200).json({ message: "Phone verified" });
     } else if (type === "email") {
       // For demo, just set emailVerified: true
-      await users.updateOne(
-        { username },
-        { $set: { emailVerified: true } }
-      );
+      await users.updateOne({ username }, { $set: { emailVerified: true } });
       return res.status(200).json({ message: "Email verified" });
     } else {
       return res.status(400).json({ message: "Invalid type" });

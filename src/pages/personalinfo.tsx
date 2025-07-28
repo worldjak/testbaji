@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-require-imports */ 
+/* eslint-disable @typescript-eslint/no-require-imports */
 import React from "react";
 import Image from "next/image";
 import { ChevronUp, User, Cake, Phone, Mail, ArrowLeft } from "lucide-react";
@@ -11,6 +11,7 @@ import moment from "moment";
 import Link from "next/link";
 
 export default function PersonalInfoPage() {
+  const router = useRouter();
   const [profile, setProfile] = React.useState<{
     username: string;
     vipPoints: number;
@@ -117,15 +118,17 @@ export default function PersonalInfoPage() {
           const primary = (profile.phones || []).find((p) => p.primary);
           const primaryVerified = primary && primary.verified;
           const emailVerified = !!profile.isEmailVerified;
-          if (!(hasFullname && hasBirthday && primaryVerified && emailVerified)) {
+          if (
+            !(hasFullname && hasBirthday && primaryVerified && emailVerified)
+          ) {
             return (
               <div className="bg-[#242731] rounded-md p-4 space-y-2">
                 <div className="flex justify-between items-start">
                   <div className="flex items-center space-x-2">
                     <IoInformation size={20} className="text-[#14805e]" />
                     <p className="text-sm text-gray-200 leading-snug">
-                      Please complete the verification below before you proceed with
-                      the withdrawal request.
+                      Please complete the verification below before you proceed
+                      with the withdrawal request.
                     </p>
                   </div>
                   <ChevronUp size={20} className="text-gray-400" />
@@ -168,7 +171,13 @@ export default function PersonalInfoPage() {
                   text: phone.verified ? "Verified" : "Not Verified",
                   color: phone.verified ? "bg-green-500" : "bg-red-500",
                   onClick: !phone.verified
-                    ? undefined // handled in InfoRow
+                    ? () => {
+                        router.push(
+                          `/verification?type=phone&phone=${encodeURIComponent(
+                            phone.number
+                          )}`
+                        );
+                      }
                     : undefined,
                 }}
               />
@@ -185,7 +194,6 @@ export default function PersonalInfoPage() {
                   <button
                     className="flex items-center border border-[#14805e] text-[#14805e] rounded-md px-4 py-2 text-sm font-medium w-full justify-center bg-transparent hover:bg-[#14805e]/10 transition"
                     onClick={() => {
-                      const router = require("next/router").useRouter();
                       router.push("/add-phone");
                     }}
                     type="button"
@@ -211,7 +219,13 @@ export default function PersonalInfoPage() {
                 : profile.isEmailVerified
                 ? "Verified"
                 : "",
-              color: profile.isEmailVerified ? "bg-green-500" : "bg-red-500",
+              color: !profile.email
+                ? "bg-[#14805e]"
+                : !profile.isEmailVerified
+                ? "bg-red-500"
+                : profile.isEmailVerified
+                ? "bg-green-500"
+                : "",
             }}
           />
           <InfoRow
@@ -265,7 +279,10 @@ function InfoRow({
                 if (button.text === "Add") {
                   router.push("/add-phone");
                 } else if (button.text === "Not Verified") {
-                  router.push("/verification?type=phone");
+                  router.push(
+                    "/verification?type=phone&phone=" +
+                      encodeURIComponent(value || "")
+                  );
                 }
               } else if (label === "Email") {
                 if (button.text === "Add") {
