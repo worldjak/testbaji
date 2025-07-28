@@ -24,7 +24,9 @@ export default async function handler(
       return res.status(401).json({ message: "Invalid credentials" });
     }
     // For demo: no session, just success
-    return res.status(200).json({ message: "Login successful" });
+    return res
+      .status(200)
+      .json({ message: "Login successful", username: user.username });
   } catch (err) {
     return res.status(500).json({ message: "Server error", error: err });
   }

@@ -34,7 +34,7 @@ export default async function handler(
       referCode,
       createdAt: new Date(),
     });
-    return res.status(201).json({ message: "Signup successful" });
+    return res.status(201).json({ message: "Signup successful", username });
   } catch (err) {
     return res.status(500).json({ message: "Server error", error: err });
   }

@@ -126,9 +126,6 @@ export default function PersonalInfoPage() {
             <span className="text-sm font-medium text-green-400">
               Personal Info
             </span>
-            <span className="ml-4 bg-green-800 text-green-400 text-xs font-medium px-2 py-1 rounded-full">
-              Full Name
-            </span>
           </div>
         </div>
 

@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
+import { log } from "console";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useState, useCallback } from "react";
@@ -110,9 +111,15 @@ export default function SignupPage() {
                 body: JSON.stringify({ username, password }),
               });
               const loginData = await loginRes.json();
-              if (loginRes.ok && loginData && loginData.user) {
-                localStorage.setItem("user", JSON.stringify(loginData.user));
-                router.push("/personalinfo");
+
+              console.log("Login data:", loginData);
+
+              if (loginData && loginData.username) {
+                localStorage.setItem(
+                  "user",
+                  JSON.stringify({ username: loginData.username })
+                );
+                router.push("/profile");
               } else {
                 setSignupSuccess("Signup successful! Please log in.");
                 setUsername("");
@@ -121,7 +128,7 @@ export default function SignupPage() {
                 setPhoneLocal("");
                 setReferCode("");
                 setVerificationInput("");
-                router.push("/");
+                router.push("/profile");
               }
             } else {
               setSignupError(data.message || "Signup failed");

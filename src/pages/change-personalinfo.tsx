@@ -33,7 +33,7 @@ export default function ChangePersonalInfoKYCVerificationPage() {
         <h1 className="text-lg font-medium">
           Update{" "}
           {type === "fullname"
-            ? "Full Name"
+            ? "Name & Birthday"
             : type === "phone"
             ? "Phone Number"
             : type === "email"

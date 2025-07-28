@@ -2,7 +2,7 @@
 import React from "react";
 import Image from "next/image";
 import bgImage from "../../public/member-header-bg.png";
-import avatarImg from "../../public/Kevin-Pietersen.jpg";
+import avatarImg from "../../public/gradient-bg.jpg";
 import { uploadToCloudinary } from "../utils/cloudinaryUpload";
 import {
   FiRefreshCcw,
