@@ -1,4 +1,4 @@
-// src/components/PersonalInfoPage.tsx
+/* eslint-disable @typescript-eslint/no-require-imports */ 
 import React from "react";
 import Image from "next/image";
 import { ChevronUp, User, Cake, Phone, Mail, ArrowLeft } from "lucide-react";
