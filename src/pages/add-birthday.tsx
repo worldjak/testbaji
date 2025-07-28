@@ -8,10 +8,37 @@ export default function AddBirthdayPage() {
   const router = useRouter();
   const [birthday, setBirthday] = useState("");
 
-  const saveBirthday = () => {
-    // TODO: call your API to save birthday
-    console.log("Saving birthday:", birthday);
-    router.push("/personalinfo");
+  const saveBirthday = async () => {
+    // Get username from localStorage
+    let username = undefined;
+    if (typeof window !== "undefined") {
+      const userStr = localStorage.getItem("user");
+      if (userStr) {
+        try {
+          const user = JSON.parse(userStr);
+          username = user.username;
+        } catch {}
+      }
+    }
+    if (!username) {
+      alert("User not found. Please log in again.");
+      return;
+    }
+    try {
+      const res = await fetch("/api/profile", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, birthday }),
+      });
+      if (res.ok) {
+        router.push("/personalinfo");
+      } else {
+        const data = await res.json();
+        alert(data.message || "Failed to save birthday");
+      }
+    } catch {
+      alert("Network error");
+    }
   };
 
   return (

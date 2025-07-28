@@ -39,8 +39,24 @@ export default function InfoField({
               ? "date"
               : "text"
           }
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
+          value={
+            label === "Birthday" && value && value.match(/^\d{4}\/\d{2}\/\d{2}$/)
+              ? value.replace(/\//g, "-")
+              : value
+          }
+          onChange={(e) => {
+            if (label === "Birthday") {
+              // Convert YYYY-MM-DD to YYYY/MM/DD for parent
+              const v = e.target.value;
+              if (v.match(/^\d{4}-\d{2}-\d{2}$/)) {
+                onChange(v.replace(/-/g, "/"));
+              } else {
+                onChange(v);
+              }
+            } else {
+              onChange(e.target.value);
+            }
+          }}
           placeholder={placeholder}
           className="w-full pl-10 pr-10 py-3 bg-transparent placeholder-gray-500 text-white focus:outline-none rounded-md"
         />

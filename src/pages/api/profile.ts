@@ -36,6 +36,7 @@ export default async function handler(
         phone: user.phone || null,
         phones,
         email: user.email || null,
+        isEmailVerified: !!user.isEmailVerified,
         createdAt: user.createdAt ? user.createdAt.toISOString() : null,
         isKycVerified: user.isKycVerified || false,
       });
@@ -43,11 +44,11 @@ export default async function handler(
       return res.status(500).json({ message: "Server error", error: err });
     }
   } else if (req.method === "PUT") {
-    // Update avatar, fullname, or add phone
-    const { username, avatar, fullname, addPhone } = req.body;
-    if (!username || (!avatar && !fullname && !addPhone)) {
+    // Update avatar, fullname, birthday, or add phone
+    const { username, avatar, fullname, birthday, addPhone } = req.body;
+    if (!username || (!avatar && !fullname && !birthday && !addPhone)) {
       return res.status(400).json({
-        message: "Username and avatar or fullname or addPhone required",
+        message: "Username and avatar or fullname or birthday or addPhone required",
       });
     }
     try {
@@ -58,6 +59,7 @@ export default async function handler(
       const updateFields: any = {};
       if (avatar) updateFields.avatar = avatar;
       if (fullname) updateFields.fullname = fullname;
+      if (birthday) updateFields.birthday = birthday;
       if (addPhone) {
         // addPhone: { number: string }
         let phones = user.phones || [];

@@ -23,6 +23,7 @@ export default function PersonalInfoPage() {
       primary?: boolean;
     }[];
     email?: string;
+    isEmailVerified?: boolean;
     birthday?: string;
   } | null>(null);
   const [loading, setLoading] = React.useState(true);
@@ -109,25 +110,37 @@ export default function PersonalInfoPage() {
           </div>
         </div>
 
-        {/* INFO ALERT */}
-        <div className="bg-[#242731] rounded-md p-4 space-y-2">
-          <div className="flex justify-between items-start">
-            <div className="flex items-center space-x-2">
-              <IoInformation size={20} className="text-[#14805e]" />
-              <p className="text-sm text-gray-200 leading-snug">
-                Please complete the verification below before you proceed with
-                the withdrawal request.
-              </p>
-            </div>
-            <ChevronUp size={20} className="text-gray-400" />
-          </div>
-          <div className="border-t border-gray-700 pt-2 flex items-center">
-            <span className="w-1 h-5 bg-green-400 inline-block mr-2" />
-            <span className="text-sm font-medium text-green-400">
-              Personal Info
-            </span>
-          </div>
-        </div>
+        {/* INFO ALERT (conditionally shown) */}
+        {(() => {
+          const hasFullname = !!profile.fullname;
+          const hasBirthday = !!profile.birthday;
+          const primary = (profile.phones || []).find((p) => p.primary);
+          const primaryVerified = primary && primary.verified;
+          const emailVerified = !!profile.isEmailVerified;
+          if (!(hasFullname && hasBirthday && primaryVerified && emailVerified)) {
+            return (
+              <div className="bg-[#242731] rounded-md p-4 space-y-2">
+                <div className="flex justify-between items-start">
+                  <div className="flex items-center space-x-2">
+                    <IoInformation size={20} className="text-[#14805e]" />
+                    <p className="text-sm text-gray-200 leading-snug">
+                      Please complete the verification below before you proceed with
+                      the withdrawal request.
+                    </p>
+                  </div>
+                  <ChevronUp size={20} className="text-gray-400" />
+                </div>
+                <div className="border-t border-gray-700 pt-2 flex items-center">
+                  <span className="w-1 h-5 bg-green-400 inline-block mr-2" />
+                  <span className="text-sm font-medium text-green-400">
+                    Personal Info
+                  </span>
+                </div>
+              </div>
+            );
+          }
+          return null;
+        })()}
 
         {/* FORM PANEL */}
         <div className="bg-[#242731] rounded-md p-4 space-y-4">
@@ -152,19 +165,54 @@ export default function PersonalInfoPage() {
                 }
                 value={phone.number}
                 button={{
-                  text: phone.verified ? "" : "Not Verified",
-                  color: phone.verified ? "bg-gray-500" : "bg-red-500",
+                  text: phone.verified ? "Verified" : "Not Verified",
+                  color: phone.verified ? "bg-green-500" : "bg-red-500",
                   onClick: !phone.verified
                     ? undefined // handled in InfoRow
                     : undefined,
                 }}
               />
             ))}
+
+          {/* Add another Phone Number button logic */}
+          {(() => {
+            const phones = profile.phones || [];
+            const primary = phones.find((p) => p.primary);
+            const primaryVerified = primary && primary.verified;
+            if (primaryVerified && phones.length < 3) {
+              return (
+                <div className="flex justify-center my-2">
+                  <button
+                    className="flex items-center border border-[#14805e] text-[#14805e] rounded-md px-4 py-2 text-sm font-medium w-full justify-center bg-transparent hover:bg-[#14805e]/10 transition"
+                    onClick={() => {
+                      const router = require("next/router").useRouter();
+                      router.push("/add-phone");
+                    }}
+                    type="button"
+                  >
+                    <span className="text-xl mr-2">+</span> Add another Phone
+                    Number
+                  </button>
+                </div>
+              );
+            }
+            return null;
+          })()}
+
           <InfoRow
             icon={Mail}
             label="Email"
             value={profile.email}
-            button={{ text: profile.email ? "" : "Add", color: "bg-[#14805e]" }}
+            button={{
+              text: !profile.email
+                ? "Add"
+                : !profile.isEmailVerified
+                ? "Not Verified"
+                : profile.isEmailVerified
+                ? "Verified"
+                : "",
+              color: profile.isEmailVerified ? "bg-green-500" : "bg-red-500",
+            }}
           />
           <InfoRow
             icon={Cake}
@@ -232,7 +280,11 @@ function InfoRow({
             })
           }
           className={`
-    ${button.color} 
+    ${
+      button.text !== "Verified"
+        ? button.color
+        : "bg-transparent border border-green-500"
+    } 
     text-white text-sm font-medium 
     px-4 py-2 rounded-md 
     ${button.text === "Not Verified" ? "w-32" : "w-24"}
